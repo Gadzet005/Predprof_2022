@@ -1,0 +1,29 @@
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <ul class="nav nav-pills">
+        {% for elem in main_menu %}
+            {% if 'submenu' in elem %}
+            <li class="nav-item dropdown">
+                {% if elem.selected %}
+                <a class="nav-link dropdown-toggle active active" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ elem.title }}</a>
+                {% else %}
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ elem.title }}</a>
+                {% endif %}
+
+                <ul class="dropdown-menu">
+                    {% for sub_elem in elem.submenu %}
+                    <li><a class="dropdown-item" href="{% url sub_elem.url_name %}">{{ sub_elem.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                {% if elem.selected %}
+                <a class="nav-link active">{{ elem.title }}</a>
+                {% else %}
+                <a href="{% url elem.url_name %}" class="nav-link">{{ elem.title }}</a>
+                {% endif %}
+            </li>
+            {% endif %}
+      {% endfor %}
+    </ul>
+</header>
