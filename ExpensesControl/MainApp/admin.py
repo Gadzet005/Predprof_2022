@@ -1,3 +1,6 @@
+from codecs import register
+from sqlite3 import register_converter
 from django.contrib import admin
+from .models import *
 
-# Register your models here.
+admin.site.register(Category)

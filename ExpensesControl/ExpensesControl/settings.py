@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'MainApp',
-    'AuthApp'
+    'AuthApp',
+    'MoneyControlApp'
 ]
 
 MIDDLEWARE = [

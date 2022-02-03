@@ -10,6 +10,7 @@ register = template.Library()
 main_menu = [
         {"title": "Главная", "url_name": "home", "access_levels": [0, 1]}, 
 
+        {"title": "Операции", "url_name": "operations", "access_levels": [1]}, 
         
         {"title": "Вход/Регистрация", "access_levels": [0],
          "submenu": [{"title": "Вход", "access_levels": [0], "url_name": "login"},
@@ -17,9 +18,9 @@ main_menu = [
          ]},
 
         {"title": "Личный кабинет", "access_levels": [1],
-         "submenu": [{"title": "Выход", "access_levels": [1], "url_name": "logout"}, 
-                     {"title": "Редактировать данные", "access_levels": [1], "url_name": "edit_user_data"},
-                     {"title": "Изменить пароль", "access_levels": [1], "url_name": "change_password"}]
+         "submenu": [{"title": "Редактировать данные", "access_levels": [1], "url_name": "edit_user_data"},
+                     {"title": "Изменить пароль", "access_levels": [1], "url_name": "change_password"},
+                     {"title": "Выход", "access_levels": [1], "url_name": "logout"}]
          },
     ]
 

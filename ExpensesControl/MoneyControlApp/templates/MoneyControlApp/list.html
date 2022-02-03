@@ -1,0 +1,22 @@
+{% extends 'MainApp/base.html' %}
+
+
+{% block content %}
+<h3>Ваши операции</h3>
+<a href="{% url 'add_expense' %}">Добавить расход</a>
+<hr>
+{% for operation in operations %}
+    <p>Сумма: {{operation.amount }}</p>
+    <p>Дата и время: {{ operation.datetime }}</p> 
+
+    {% if operation.category %}
+    <p>Категория: {{ operation.category.name }}</p> 
+    {% else %}
+    <p>Категория: нет</p> 
+    {% endif %}
+
+    <a href="{% url 'edit_expense' operation.pk %}">Изменить</a>
+    <a href="{% url 'delete_operation' operation.pk %}">Удалить</a>
+    <hr>
+{% endfor %}
+{% endblock content %}
