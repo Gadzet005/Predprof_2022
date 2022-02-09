@@ -1,0 +1,11 @@
+{% extends 'MainApp/base.html' %}
+
+
+{% block content %}
+<h3>Ваши категории</h3>
+<hr>
+{% for category in categories %}
+    {{ category.name }}
+    <hr>
+{% endfor %}
+{% endblock content %}

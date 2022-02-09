@@ -1,0 +1,47 @@
+{% extends 'MainApp/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h3 class="d-flex justify-content-center">Ваши операции</h3>
+<a class="d-flex justify-content-center" href="{% url 'add_operation' %}">Добавить операцию</a>
+<a class="d-flex justify-content-center" href="{% url 'export_data' %}">Экспорт</a>
+<hr>
+
+<div class="d-flex justify-content-center">
+  <div class="form">
+    <h3>Фильтр</h3>
+  <form method="get" action="">
+    {% for field in filter.form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% render_field field class='form-control' %}
+    </div>
+    {% endfor %}
+    <br>
+    <button type="submit" class="btn btn-primary">Поиск</button>
+    <button class="btn btn-primary" name="+" type="submit">+</button>
+    <button class="btn btn-primary" name="-" type="submit">-</button>
+  </form>
+  </div>
+</div>
+
+<hr>
+{% for operation in filter.qs %}
+    {% if operation.category.type == 'Расход' %}
+        <p class="d-flex justify-content-center">Сумма: -{{operation.amount }}</p>
+    {% else %}
+        <p class="d-flex justify-content-center">Сумма: {{operation.amount }}</p>
+    {% endif %}
+    <p class="d-flex justify-content-center">Дата: {{ operation.date }}</p> 
+
+    {% if operation.category %}
+    <p class="d-flex justify-content-center">Категория: {{ operation.category.name }}</p> 
+    {% else %}
+    <p class="d-flex justify-content-center">Категория: нет</p> 
+    {% endif %}
+
+    <a class="d-flex justify-content-center" href="{% url 'edit_operation' operation.pk %}">Изменить</a>
+    <a class="d-flex justify-content-center" href="{% url 'delete_operation' operation.pk %}">Удалить</a>
+    <hr>
+{% endfor %}
+{% endblock content %}

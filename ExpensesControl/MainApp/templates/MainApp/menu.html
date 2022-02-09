@@ -1,7 +1,7 @@
 <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
     <ul class="nav nav-pills">
-        {% for elem in main_menu %}
-            {% if 'submenu' in elem %}
+        {% for elem in menu %}
+            {% if elem.submenu %}
             <li class="nav-item dropdown">
                 {% if elem.selected %}
                 <a class="nav-link dropdown-toggle active active" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ elem.title }}</a>
