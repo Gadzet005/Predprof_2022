@@ -49,6 +49,8 @@ def get_menu_data(menu_name):
         MenuElem("Доходы", "add_income", [1]), 
     ]
 
+    
+
     menu_list = {
         "main_menu": main_menu, 
         "operation_menu": operation_menu

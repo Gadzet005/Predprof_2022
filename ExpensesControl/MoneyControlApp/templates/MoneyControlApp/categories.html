@@ -5,6 +5,11 @@
 {% block content %}
 <h3>Ваши категории</h3>
 
+<hr>
+<!-- Добавляем фильтр -->
+{% include "MainApp/filter.html" %}
+<hr>
+
 <!-- Диаграмма -->
 <script src="https://www.google.com/jsapi"></script>
 {{ cat_data|json_script:"cat_data" }}

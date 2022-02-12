@@ -10,24 +10,45 @@
 {% include "MainApp/filter.html" %}
 
 <hr>
-{% for operation in filter.qs %}
-    <div name="operation">
-    {% if operation.category.type == 'Расход' %}
-        <p class="d-flex justify-content-center">Сумма: -{{operation.amount }}</p>
-    {% else %}
-        <p class="d-flex justify-content-center">Сумма: {{operation.amount }}</p>
-    {% endif %}
-    <p class="d-flex justify-content-center">Дата: {{ operation.date }}</p> 
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Тип</th>
+            <th scope="col">Категория</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Изменить/Удалить</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for operation in filter.qs %}
+        <tr> 
+            {% if operation.category.type == 'Расход' %}
+            <td style="color:red">{{operation.category.type }}</td>
+            {% else %}
+            <td style="color:green">{{operation.category.type }}</td>
+            {% endif %}
 
-    {% if operation.category %}
-    <p class="d-flex justify-content-center">Категория: {{ operation.category.name }}</p> 
-    {% else %}
-    <p class="d-flex justify-content-center">Категория: нет</p> 
-    {% endif %}
+            {% if operation.category %}
+            <td>{{ operation.category.name }}</td> 
+            {% else %}
+            <td>Нет</td> 
+            {% endif %}
 
-    <a class="d-flex justify-content-center" href="{% url 'edit_operation' operation.pk %}">Изменить</a>
-    <a class="d-flex justify-content-center" href="{% url 'delete_operation' operation.pk %}">Удалить</a>
-    <hr>
-    </div>
-{% endfor %}
+            {% if operation.category.type == 'Расход' %}
+            <td style="color:red">{{operation.amount }}</td>
+            {% else %}
+            <td style="color:green">{{operation.amount }}</td>
+            {% endif %}
+            
+            <td>{{operation.date }}</td>
+
+            <td>
+            <a href="{% url 'edit_operation' operation.pk %}">Изменить</a>/<a href="{% url 'delete_operation' operation.pk %}">Удалить</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 {% endblock content %}

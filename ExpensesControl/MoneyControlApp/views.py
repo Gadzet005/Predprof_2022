@@ -94,9 +94,10 @@ class DeleteOperation(LoginRequiredMixin, DeleteView):
         # Пользователь может удалять только свои операции
         return Operation.objects.filter(user=self.request.user)
 
-class Categories(LoginRequiredMixin, ListView):
+class Categories(LoginRequiredMixin, FilterView):
     template_name = "MoneyControlApp/categories.html"
     model = Category
+    filterset_class = OperationsFilter
     context_object_name = "categories"
     login_url = reverse_lazy("login")
 
@@ -106,10 +107,10 @@ class Categories(LoginRequiredMixin, ListView):
             for operation in operations:
                 total_amount += operation.amount
             return total_amount
-        
+
         context = super().get_context_data(**kwargs)
         context["title"] = "Категории"
-        operations = Operation.objects.all()
+        operations = Operation.objects.filter(user=self.request.user)
         total_amount = get_operations_amount(operations)
 
         # cat_data = [(Название категори, общяя сумма категории, процент этой суммы от общей)]
@@ -142,7 +143,7 @@ class ExportData(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         # Получаем данные из формы и сортируем операции
         date = form.cleaned_data['date']
-        operations = OperationsFilter().date_filter(Operation.objects, None, date).filter(user=self.request.user)
+        operations = Operation.objects.filter(user=self.request.user)
         
         TABLE_HEAD = ["Тип", "Сумма", "Дата", "Категория"]
 
