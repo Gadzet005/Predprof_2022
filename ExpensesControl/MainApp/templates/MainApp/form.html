@@ -1,7 +1,10 @@
 {% extends 'MainApp/base.html' %}
+{% load static %}
 {% load widget_tweaks %}
+{% load main_tags %}
 
 {% block content %}
+
 <div class="d-flex justify-content-center">
   <div class="form">
     <h3>{{ h3_text }}</h3>
@@ -17,6 +20,7 @@
     <div class="form-group">
       <label for="{{ field.id_for_label }}">{{ field.label }}</label>
       {% render_field field class='form-control' %}
+      <div>{{ field.help_text }}</div>
       <div>{{ field.errors }}</div>
     </div>
     {% endfor %}
@@ -25,4 +29,10 @@
   </form>
   </div>
 </div>
+
+<!-- Скрипты для некоторых форм -->
+{% get_cat_type as categories %}
+{{ categories|json_script:"categories" }}
+<script src="{% static 'MainApp/js/form.js' %}"></script>
+
 {% endblock content %}

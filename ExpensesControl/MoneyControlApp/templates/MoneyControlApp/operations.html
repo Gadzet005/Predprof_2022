@@ -1,5 +1,4 @@
 {% extends 'MainApp/base.html' %}
-{% load widget_tweaks %}
 
 {% block content %}
 <h3 class="d-flex justify-content-center">Ваши операции</h3>
@@ -7,26 +6,12 @@
 <a class="d-flex justify-content-center" href="{% url 'export_data' %}">Экспорт</a>
 <hr>
 
-<div class="d-flex justify-content-center">
-  <div class="form">
-    <h3>Фильтр</h3>
-  <form method="get" action="">
-    {% for field in filter.form %}
-    <div class="form-group">
-      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-      {% render_field field class='form-control' %}
-    </div>
-    {% endfor %}
-    <br>
-    <button type="submit" class="btn btn-primary">Поиск</button>
-    <button class="btn btn-primary" name="+" type="submit">+</button>
-    <button class="btn btn-primary" name="-" type="submit">-</button>
-  </form>
-  </div>
-</div>
+<!-- Добавляем фильтр -->
+{% include "MainApp/filter.html" %}
 
 <hr>
 {% for operation in filter.qs %}
+    <div name="operation">
     {% if operation.category.type == 'Расход' %}
         <p class="d-flex justify-content-center">Сумма: -{{operation.amount }}</p>
     {% else %}
@@ -43,5 +28,6 @@
     <a class="d-flex justify-content-center" href="{% url 'edit_operation' operation.pk %}">Изменить</a>
     <a class="d-flex justify-content-center" href="{% url 'delete_operation' operation.pk %}">Удалить</a>
     <hr>
+    </div>
 {% endfor %}
 {% endblock content %}

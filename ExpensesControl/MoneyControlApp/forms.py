@@ -12,16 +12,16 @@ DATE_CHOICES = (
 )
 
 class OperationForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["category"].choices = [[cat.id, f"{cat.type} | {cat.name}"] for cat in Category.objects.all()]
+    type = forms.ChoiceField(label="Тип", choices=(["Расход", "Расход"], ["Доход", "Доход"]),
+                             widget=forms.Select(attrs={"id": "type_select"}))
 
     class Meta:
         model = Operation
-        fields = ('amount', 'category', 'date')
+        fields = ('type', 'category', 'amount', 'date')
         widgets = {
             'amount': forms.TextInput(attrs={"placeholder": "Сумма операции"}),
             'date': forms.DateInput(attrs={"placeholder": "Дата операции"}),
+            'category': forms.Select(attrs={"id": "cat_select"}),
         }
     
     def clean_amount(self):

@@ -60,6 +60,7 @@ class EditOperation(LoginRequiredMixin, UpdateView):
         context["title"] = "Изменить операцию"
         context["h3_text"] = "Изменить операцию"
         context["button_text"] = "Сохранить"
+        context["categories"] = [(cat.id, cat.name, cat.type) for cat in Category.objects.all()]
         return context
 
     def form_valid(self, form):
@@ -100,8 +101,28 @@ class Categories(LoginRequiredMixin, ListView):
     login_url = reverse_lazy("login")
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        def get_operations_amount(operations):
+            total_amount = 0 
+            for operation in operations:
+                total_amount += operation.amount
+            return total_amount
+        
         context = super().get_context_data(**kwargs)
         context["title"] = "Категории"
+        operations = Operation.objects.all()
+        total_amount = get_operations_amount(operations)
+
+        # cat_data = [(Название категори, общяя сумма категории, процент этой суммы от общей)]
+        cat_data = []
+        for cat in self.object_list:
+            cat_amount = get_operations_amount(operations.filter(category=cat))
+            cat_percent = round(cat_amount / total_amount, 2) * 100
+            cat_data.append([cat.name, cat_amount, cat_percent]) 
+
+        # Сортируем по общей сумме операций этой категории
+        cat_data = sorted(cat_data, key=lambda cat: -cat[1])
+        context["cat_data"] = cat_data
+
         return context
 
 class ExportData(LoginRequiredMixin, FormView):
@@ -121,13 +142,17 @@ class ExportData(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         # Получаем данные из формы и сортируем операции
         date = form.cleaned_data['date']
-        operations = OperationsFilter.date_filter(Operation.objects, None, date).filter(user=self.request.user)
+        operations = OperationsFilter().date_filter(Operation.objects, None, date).filter(user=self.request.user)
         
         TABLE_HEAD = ["Тип", "Сумма", "Дата", "Категория"]
 
         # Создаем таблицу
         workbook = Workbook()
         sheet = workbook.active
+
+        # Настраиваем таблицу
+        sheet.column_dimensions['C'].width = 13
+        sheet.column_dimensions['D'].width = 13
 
         # Создаем шапку таблицы
         for col, val in enumerate(TABLE_HEAD):

@@ -1,11 +1,19 @@
 {% extends 'MainApp/base.html' %}
+{% load static %}
 
 
 {% block content %}
 <h3>Ваши категории</h3>
+
+<!-- Диаграмма -->
+<script src="https://www.google.com/jsapi"></script>
+{{ cat_data|json_script:"cat_data" }}
+<script src="{% static 'MainApp/js/cat_chart.js' %}"></script>
+<div id="cat_chart" style="width: 500px; height: 400px;"></div>
+
 <hr>
-{% for category in categories %}
-    {{ category.name }}
+{% for cat in cat_data %}
+    {{ cat.0 }}: {{ cat.1 }}р, {{ cat.2 }}%
     <hr>
 {% endfor %}
 {% endblock content %}
