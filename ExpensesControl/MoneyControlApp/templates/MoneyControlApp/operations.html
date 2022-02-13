@@ -1,4 +1,5 @@
 {% extends 'MainApp/base.html' %}
+{% load static %}
 
 {% block content %}
 <h3 class="d-flex justify-content-center">Ваши операции</h3>
@@ -10,45 +11,44 @@
 {% include "MainApp/filter.html" %}
 
 <hr>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th scope="col">Тип</th>
-            <th scope="col">Категория</th>
-            <th scope="col">Сумма</th>
-            <th scope="col">Дата</th>
-            <th scope="col">Изменить/Удалить</th>
+<div class="container overflow-auto">
+<table class="table shadow table-striped">
+    <thead class="bg-primary text-white">
+        <tr class="">
+            <th class="col-3" scope="col">Название</th>
+            <th class="col-3" scope="col">Категория</th>
+            <th class="col-3" scope="col">Сумма</th>
+            <th class="col-2" scope="col">Дата</th>
+            <th class="col-1" scope="col"></th>
         </tr>
     </thead>
     <tbody>
         {% for operation in filter.qs %}
-        <tr> 
-            {% if operation.category.type == 'Расход' %}
-            <td style="color:red">{{operation.category.type }}</td>
-            {% else %}
-            <td style="color:green">{{operation.category.type }}</td>
-            {% endif %}
-
+        <tr>
+            <td>{{ operation.name }}</td>
+            
             {% if operation.category %}
-            <td>{{ operation.category.name }}</td> 
+                <td>{{ operation.category.name }}</td>
             {% else %}
-            <td>Нет</td> 
+                <td>Нет</td>
             {% endif %}
 
             {% if operation.category.type == 'Расход' %}
-            <td style="color:red">{{operation.amount }}</td>
+                <td style="color:red">-{{operation.amount }}</td>
             {% else %}
-            <td style="color:green">{{operation.amount }}</td>
+                <td style="color:green">{{operation.amount }}</td>
             {% endif %}
             
             <td>{{operation.date }}</td>
 
             <td>
-            <a href="{% url 'edit_operation' operation.pk %}">Изменить</a>/<a href="{% url 'delete_operation' operation.pk %}">Удалить</a>
+            <a href="{% url 'edit_operation' operation.pk %}"><img src="{% static 'MainApp/img/edit_icon.png' %}" width="20" height="20"></a>
+            <a href="{% url 'delete_operation' operation.pk %}"><img src="{% static 'MainApp/img/delete_icon.png' %}" width="20" height="20"></a>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+</div>
 
 {% endblock content %}

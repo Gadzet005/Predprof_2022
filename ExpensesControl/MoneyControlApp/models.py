@@ -5,6 +5,7 @@ from datetime import date
 
 class Operation(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+    name = models.CharField(verbose_name="Название", max_length=50, default="Операция")
     amount = models.IntegerField(verbose_name="Сумма")
     date = models.DateField(verbose_name="Дата", default=date.today)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)

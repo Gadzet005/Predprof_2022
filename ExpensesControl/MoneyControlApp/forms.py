@@ -17,9 +17,10 @@ class OperationForm(forms.ModelForm):
 
     class Meta:
         model = Operation
-        fields = ('type', 'category', 'amount', 'date')
+        fields = ('name', 'type', 'category', 'amount', 'date')
         widgets = {
-            'amount': forms.TextInput(attrs={"placeholder": "Сумма операции"}),
+            'name': forms.TextInput(attrs={"placeholder": "Например: поход в кино"}),
+            'amount': forms.NumberInput(attrs={"placeholder": "Сумма операции"}),
             'date': forms.DateInput(attrs={"placeholder": "Дата операции"}),
             'category': forms.Select(attrs={"id": "cat_select"}),
         }
