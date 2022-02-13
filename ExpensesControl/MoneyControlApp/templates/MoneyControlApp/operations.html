@@ -34,9 +34,9 @@
             {% endif %}
 
             {% if operation.category.type == 'Расход' %}
-                <td style="color:red">-{{operation.amount }}</td>
+                <td style="color:red">-{{operation.amount }} р.</td>
             {% else %}
-                <td style="color:green">{{operation.amount }}</td>
+                <td style="color:green">{{operation.amount }} р.</td>
             {% endif %}
             
             <td>{{operation.date }}</td>

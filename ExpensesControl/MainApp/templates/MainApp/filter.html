@@ -1,5 +1,6 @@
 {% load widget_tweaks %}
 {% load static %}
+{% load main_tags %}
 
 <div class="d-flex justify-content-center">
     <form method="get" action="">
@@ -18,3 +19,7 @@
       </div>
     </form>
   </div>
+
+{% get_cat_type as categories %}
+{{ categories|json_script:"categories" }}
+<script src="{% static 'MainApp/js/cat-type.js' %}"></script>

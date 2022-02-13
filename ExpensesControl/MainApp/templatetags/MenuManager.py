@@ -32,7 +32,7 @@ def get_menu_data(menu_name):
     main_menu = [
             MenuElem("Главная", "home", [0, 1]), 
             MenuElem("Операции", "operations", [1]), 
-            MenuElem("Категории", "categories", [1]),
+            MenuElem("Статистика", "categories", [1]),
             MenuElem("Вход/Регистрация", None, [0], [
                 MenuElem("Вход", "login", [0]),
                 MenuElem("Регистрация", "register", [0])

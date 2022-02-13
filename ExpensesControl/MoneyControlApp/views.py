@@ -25,7 +25,7 @@ class Operations(LoginRequiredMixin, FilterView):
 
     def get_queryset(self):
         # Показывает пользователю только его изменения баланса
-        return Operation.objects.filter(user=self.request.user)
+        return Operation.objects.filter(user=self.request.user).order_by('-date')
 
 class AddOperation(LoginRequiredMixin, CreateView):
     form_class = OperationForm
@@ -96,29 +96,28 @@ class DeleteOperation(LoginRequiredMixin, DeleteView):
 
 class Categories(LoginRequiredMixin, FilterView):
     template_name = "MoneyControlApp/categories.html"
-    model = Category
-    filterset_class = OperationsFilter
-    context_object_name = "categories"
+    model = Operation
+    filterset_class = BaseOperationFilter
     login_url = reverse_lazy("login")
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        def get_operations_amount(operations):
-            total_amount = 0 
-            for operation in operations:
-                total_amount += operation.amount
-            return total_amount
-
         context = super().get_context_data(**kwargs)
         context["title"] = "Категории"
-        operations = Operation.objects.filter(user=self.request.user)
-        total_amount = get_operations_amount(operations)
+        operations = self.filterset.qs.filter(user=self.request.user)
+        
+        data = {}
+        for operation in operations:
+            if operation.category.name not in data:
+                data[operation.category.name] = (operation.amount)
+            else:
+                data[operation.category.name] += operation.amount
+    
+        total_amount = sum(data.values())
 
-        # cat_data = [(Название категори, общяя сумма категории, процент этой суммы от общей)]
         cat_data = []
-        for cat in self.object_list:
-            cat_amount = get_operations_amount(operations.filter(category=cat))
-            cat_percent = round(cat_amount / total_amount, 2) * 100
-            cat_data.append([cat.name, cat_amount, cat_percent]) 
+        for elem in data:
+            percent = round(data[elem] * 100 / total_amount, 2)
+            cat_data.append([elem, data[elem], percent])
 
         # Сортируем по общей сумме операций этой категории
         cat_data = sorted(cat_data, key=lambda cat: -cat[1])
@@ -142,8 +141,9 @@ class ExportData(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         # Получаем данные из формы и сортируем операции
-        date = form.cleaned_data['date']
-        operations = Operation.objects.filter(user=self.request.user)
+        date_begin = form.cleaned_data['date_begin']
+        date_end = form.cleaned_data['date_end']
+        operations = Operation.objects.filter(user=self.request.user, date__gte=date_begin, date__lte=date_end)
         
         TABLE_HEAD = ["Тип", "Сумма", "Дата", "Категория"]
 
