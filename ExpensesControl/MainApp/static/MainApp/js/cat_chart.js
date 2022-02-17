@@ -12,7 +12,7 @@ function drawChart() {
     var data = google.visualization.arrayToDataTable(lst);
     var options = {
         title: 'Категории',
-        is3D: true,
+        is3D: false,
         pieResidueSliceLabel: 'Остальные'
     };
     var chart = new google.visualization.PieChart(document.getElementById('cat_chart'));

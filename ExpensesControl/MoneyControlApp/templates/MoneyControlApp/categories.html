@@ -2,22 +2,48 @@
 {% load static %}
 
 {% block content %}
+
+{% if cat_data %}
+
 <h3>Ваши категории</h3>
 
 <hr>
 <!-- Добавляем фильтр -->
 {% include "MainApp/filter.html" %}
 <hr>
-
 <!-- Диаграмма -->
 <script src="https://www.google.com/jsapi"></script>
 {{ cat_data|json_script:"cat_data" }}
 <script src="{% static 'MainApp/js/cat_chart.js' %}"></script>
-<div id="cat_chart" style="width: 500px; height: 400px;"></div>
-
+<div class="container" id="cat_chart" style="width: 500px; height: 500px;"></div>
 <hr>
-{% for cat in cat_data %}
-    {{ cat.0 }}: {{ cat.1 }}р, {{ cat.2 }}%
-    <hr>
-{% endfor %}
+<div class="container overflow-auto">
+    <table class="table shadow table-striped">
+        <thead class="bg-primary text-white">
+            <tr>
+                <th class="col-3" scope="col">Категория</th>
+                <th class="col-3" scope="col">Сумма, ₽</th>
+                <th id="amount_tr" class="col-3" scope="col">Процент, %</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for cat in cat_data %}
+            <tr class="table-light" name="operation" id="{{ operation.id }}">
+                <td>{{ cat.0 }}</td>
+                
+                <td>{{cat.1 }}</td>
+    
+                <td>{{cat.2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    
+
+{% else %}
+<h1>Добавьте операции для просмотра статистики</h1>
+{% endif %}
+
 {% endblock content %}
