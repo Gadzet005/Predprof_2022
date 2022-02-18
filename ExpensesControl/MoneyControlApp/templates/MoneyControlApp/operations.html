@@ -2,15 +2,56 @@
 {% load static %}
 
 {% block content %}
-<h3 class="d-flex justify-content-center">Ваши операции</h3>
-<a class="d-flex justify-content-center" href="{% url 'add_operation' %}">Добавить операцию</a>
-<a class="d-flex justify-content-center" href="{% url 'export_data' %}">Экспорт</a>
-<hr>
+<h3 class="d-flex justify-content-center">Операции</h3>
+
+<div class="d-flex justify-content-center">
+    <div class="row">
+
+        <div class="col px-2" style="text-align: center;">
+            <a class="px-1" href="{% url 'add_operation' %}">
+                <img src="{% static 'MainApp/img/add_icon.png' %}" width="40" height="40">
+            </a>
+            <br>
+            <p style="font-size: 15px;">Добавить</p>
+        </div>
+
+        <div class="col px-2" style="text-align: center;">
+            <a class="px-1" href="{% url 'export_data' %}">
+                <img src="{% static 'MainApp/img/export_icon.png' %}" width="40" height="40">
+            </a>
+            <br>
+            <p style="font-size: 15px;">Экспорт</p>
+        </div>
+
+        <div class="col px-2" style="text-align: center;">
+            <a data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <img src="{% static 'MainApp/img/filter_icon.png' %}" width="40" height="40">
+            </a>
+            <br>
+            <p style="font-size: 15px;">Фильтр</p>
+        </div>
+
+    </div>
+</div>
+
+<div class="d-flex justify-content-center">
+    <h3>Баланс:</h3><pre> </pre>
+    {% if bal >= 0 %}
+        <h3 style="color:green;" id="bal">{{ bal }}</h3>
+        <pre> </pre>
+        <h3 style="color:green;" id="bal_unit">₽</h3>
+    {% else %}
+        <h3 style="color:red;" id="bal">{{ bal }}</h3>
+        <pre> </pre>
+        <h3 style="color:red;" id="bal_unit">₽</h3>
+    {% endif %}
+</div>
 
 <!-- Добавляем фильтр -->
 {% include "MainApp/filter.html" %}
 
-<hr>
+<br>
+
 <div class="container overflow-auto">
 <table class="table shadow table-striped">
     <thead class="bg-primary text-white">
@@ -19,9 +60,7 @@
             <th class="col-3" scope="col">Категория</th>
             <th id="amount_tr" class="col-3" scope="col">Сумма, ₽</th>
             <th class="col-2" scope="col">Дата</th>
-            <th class="col-1" scope="col">
-                <a href="{% url 'add_operation' %}"><img src="{% static 'MainApp/img/add_icon.png' %}" width="25" height="25"></a>
-            </th>
+            <th class="col-1" scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -29,7 +68,7 @@
         {% for operation in filter.qs %}
         <tr class="table-light" name="operation" id="{{ operation.id }}">
             <td>{{ operation.name }}</td>
-            
+
             {% if operation.category %}
                 <td>{{ operation.category.name }}</td>
             {% else %}
@@ -45,8 +84,8 @@
             <td>{{operation.date }}</td>
 
             <td>
-            <a href="{% url 'edit_operation' operation.pk %}"><img src="{% static 'MainApp/img/edit_icon.png' %}" width="20" height="20"></a>
-            <a href="{% url 'delete_operation' operation.pk %}"><img src="{% static 'MainApp/img/delete_icon.png' %}" width="20" height="20"></a>
+            <a href="{% url 'edit_operation' operation.pk %}"><img src="{% static 'MainApp/img/edit_icon.png' %}" width="30" height="30"></a>
+            <a href="{% url 'delete_operation' operation.pk %}"><img src="{% static 'MainApp/img/delete_icon.png' %}" width="30" height="30"></a>
             </td>
         </tr>
         {% endfor %}

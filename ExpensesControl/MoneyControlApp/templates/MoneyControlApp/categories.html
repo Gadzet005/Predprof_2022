@@ -5,12 +5,51 @@
 
 {% if cat_data %}
 
-<h3>Ваши категории</h3>
+<h3 class="d-flex justify-content-center">Статистика</h3>
+<div class="d-flex justify-content-center">
+    <div class="row">
 
-<hr>
+        <div class="col-sm px-2" style="text-align: center;">
+            <a data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <img src="{% static 'MainApp/img/filter_icon.png' %}" width="40" height="40">
+            </a>
+            <br>
+            <p style="font-size: 15px;">Фильтр</p>
+        </div>
+
+    </div>
+</div>
+
 <!-- Добавляем фильтр -->
 {% include "MainApp/filter.html" %}
-<hr>
+
+<br>
+<!-- <script src="https://www.google.com/jsapi"></script>
+<script>
+ google.load("visualization", "1", {packages:["corechart"]});
+ google.setOnLoadCallback(drawChart);
+ function drawChart() {
+  var data = google.visualization.arrayToDataTable([
+   ['Год', 'Россия', 'США'],
+   ['Пон', 1.3, 70],
+   ['Вт', 2000, 3120],
+   ['Ср', 12170, 919200],
+   ['Чт', 13000, 7000],
+   ['Пт', 2000, 3120],
+   ['Сб', 12170, 9920],
+   ['Вс', 12170, 9920],
+  ]);
+  var options = {
+   title: 'Добыча нефти',
+   hAxis: {title: 'Год'},
+   vAxis: {title: 'Тыс. тонн'}
+  };
+  var chart = new google.visualization.ColumnChart(document.getElementById('oil'));
+  chart.draw(data, options);
+ }
+</script>
+<div id="oil" style="width: 500px; height: 400px;"></div> -->
+
 <!-- Диаграмма -->
 <script src="https://www.google.com/jsapi"></script>
 {{ cat_data|json_script:"cat_data" }}
@@ -45,5 +84,4 @@
 {% else %}
 <h1>Добавьте операции для просмотра статистики</h1>
 {% endif %}
-
 {% endblock content %}

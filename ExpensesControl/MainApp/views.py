@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.views.generic import *
 
 class Home(TemplateView):

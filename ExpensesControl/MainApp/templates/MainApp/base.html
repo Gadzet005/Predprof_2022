@@ -19,14 +19,17 @@
     <!-- Ссылки на кастомные css файлы -->
     <link rel="stylesheet" href="{% static 'MainApp/css/MyStyles.css' %}">
 
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
     {% block extrahead %}
     {% endblock %}
 </head>
 
 <body>
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
 <!-- Главное меню -->
 {% get_menu request 'main_menu' %}
 
@@ -40,16 +43,13 @@
     {% endfor %}
 {% endif %}
 
-<section class="px-2">
+<section class="px-1">
 {% block content %}
 {% endblock content %}
 </section>
+
 <!-- Скрипт для закрытия сообщений -->
 <script src="{% static 'MainApp/js/messages.js' %}"></script>
-
 </body>
-
-<footer class="u-clearfix u-footer u-palette-1-base" id="sec-223b">
-</footer>
 
 </html>

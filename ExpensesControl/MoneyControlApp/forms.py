@@ -10,6 +10,11 @@ def get_initial_export_date():
 class OperationForm(forms.ModelForm):
     type = forms.ChoiceField(label="Тип", choices=(["Расход", "Расход"], ["Доход", "Доход"]),
                              widget=forms.Select(attrs={"id": "id_type"}))
+    date = forms.DateField(label="Дата", initial=date.today, widget=forms.TextInput(attrs={"type": "date"}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].empty_label = "Не выбрана"
 
     class Meta:
         model = Operation
@@ -17,7 +22,6 @@ class OperationForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={"placeholder": "Например: поход в кино"}),
             'amount': forms.NumberInput(attrs={"placeholder": "Сумма операции"}),
-            'date': forms.DateInput(attrs={"placeholder": "Дата операции"}),
             'category': forms.Select(attrs={"id": "id_category"}),
         }
     
@@ -28,5 +32,7 @@ class OperationForm(forms.ModelForm):
         return amount
 
 class ExportDataForm(forms.Form):
-    date_begin = forms.DateField(label="Начало периода", initial=get_initial_export_date)
-    date_end = forms.DateField(label="Конец периода", initial=date.today)
+    date_begin = forms.DateField(label="Начало периода", initial=get_initial_export_date,
+                                 widget=forms.TextInput(attrs={"type": "date"}))
+    date_end = forms.DateField(label="Конец периода", initial=date.today, 
+                               widget=forms.TextInput(attrs={"type": "date"}))

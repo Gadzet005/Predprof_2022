@@ -21,6 +21,7 @@ class Operations(LoginRequiredMixin, FilterView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Операции"
+        context["bal"] = Operation.get_sum(self.object_list)
         return context
 
     def get_queryset(self):

@@ -2,6 +2,10 @@ let operations = document.getElementsByName("operation");
 var amount_tr = document.getElementById("amount_tr");
 var select = null;
 
+var bal = document.getElementById("bal");
+var bal_amount = bal.innerHTML
+var bal_unit = document.getElementById("bal_unit");
+
 // Формируем: id операции: сумма операции
 let amount_data = {};
 for (var i = 0; i < operations.length; i++) {
@@ -13,6 +17,8 @@ function SelectOperation () {
         this.className = "table-light";
         select = null;
         amount_tr.innerHTML = "Сумма, ₽";
+        bal.innerHTML = bal_amount;
+        bal_unit.innerHTML = "₽";
         
         let amount_list = document.getElementsByName("amount");
         for (var i = 0; i < amount_list.length; i++) {
@@ -28,10 +34,12 @@ function SelectOperation () {
         amount_tr.innerHTML = "Сумма, отн.";
 
         // Изменяем значения у операций, относительно выбранной операции
-        var select_amount = amount_data[this.id];
+        var select_amount = Math.abs(amount_data[this.id]);
+        bal.innerHTML = (bal_amount / select_amount).toFixed(2);
+        bal_unit.innerHTML = "отн.";
         let amount_list = document.getElementsByName("amount");
         for (var i = 0; i < amount_list.length; i++) {
-            amount_list[i].innerHTML = (amount_data[amount_list[i].parentElement.id] / Math.abs(select_amount)).toFixed(2);
+            amount_list[i].innerHTML = (amount_data[amount_list[i].parentElement.id] / select_amount).toFixed(2);
         }
     }
 }
