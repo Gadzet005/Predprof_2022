@@ -2,11 +2,26 @@
 {% load static %}
 
 {% block content %}
+<script src="https://www.google.com/jsapi"></script>
 
-{% if cat_data %}
 
-<h3 class="d-flex justify-content-center">Статистика</h3>
-<div class="d-flex justify-content-center">
+<ul class="nav nav-tabs d-flex justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="cat-tab" data-bs-toggle="tab" data-bs-target="#cat" type="button" role="tab" aria-controls="cat" aria-selected="true">Категории</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="month_data-tab" data-bs-toggle="tab" data-bs-target="#month_data" type="button" role="tab" aria-controls="month_data" aria-selected="false">Месяца</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="forecast-tab" data-bs-toggle="tab" data-bs-target="#forecast" type="button" role="tab" aria-controls="forecast" aria-selected="false">Прогнозы</button>
+    </li>
+  </ul>
+<br>
+
+<div class="tab-content" id="myTabContent">
+
+<div class="tab-pane fade show active" id="cat" role="tabpanel" aria-labelledby="cat-tab">
+    <h3 class="d-flex justify-content-center">Статистика</h3>
     <div class="row">
 
         <div class="col-sm px-2" style="text-align: center;">
@@ -18,46 +33,85 @@
         </div>
 
     </div>
+    <!-- Добавляем фильтр -->
+    {% include "MainApp/filter.html" %}
+    {% if cat_data %}
+    <!-- Диаграмма -->
+    {{ cat_data|json_script:"cat_data" }}
+    <script src="{% static 'MainApp/js/cat_chart.js' %}"></script>
+    <div class="container" id="cat_chart" style="width: 400px; height: 300px;"></div>
+    <div class="container overflow-auto">
+        <table class="table table-striped">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th class="col-3" scope="col">Категория</th>
+                    <th class="col-3" scope="col">Сумма, ₽</th>
+                    <th id="amount_tr" class="col-3" scope="col">Процент, %</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for cat in cat_data %}
+                <tr class="table-light" name="operation" id="{{ operation.id }}">
+                    <td>{{ cat.0 }}</td>
+                    
+                    <td>{{cat.1 }}</td>
+        
+                    <td>{{cat.2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+    {% else %}
+    <br>
+    <div class="container d-flex justify-content-center border-dark border rounded-3 mw-100" style="width: 800px;">
+        <h3>Добавьте операции для просмотра диаграммы</h3>
+    </div>
+
+    {% endif %}
 </div>
 
-<!-- Добавляем фильтр -->
-{% include "MainApp/filter.html" %}
+<div class="tab-pane fade active" id="month_data" role="tabpanel" aria-labelledby="month_data-tab">
+    {{ month_data|json_script:"month_data" }}
+    <script src="{% static 'MainApp/js/month_chart.js' %}"></script>
+    <div class="d-flex justify-content-center">
+        <div class="mw-100" id="month_data_chart" style="height: 400px;width: 1000px;"></div>
+    </div>
+</div>
+
+<div class="tab-pane fade" id="forecast" role="tabpanel" aria-labelledby="forecast-tab">
+    <div class="container border-dark border rounded-3 mw-100" style="width: 800px;">
+        <h3>Прогноз расходов к концу месяца: <strong style="color:red">{{forecast}}₽</strong></h3>
+    
+        {% if bal >= 0 %}
+            <h3>Общий остаток сейчас: <strong style="color:green">{{bal}}₽</strong></h3>
+        {% else %}
+            <h3>Общий остаток сейчас: <strong style="color:red">{{bal}}₽</strong></h3>
+        {% endif %}
+    
+        <h3>Общий остаток c учетом инфляции через:</h3>
+        {% for elem in cpi_data %}
+            {% if elem.1 >= 0 %}
+            <h3>{{ elem.0 }}: <strong style="color:green">{{elem.1}}₽</strong></h3>
+            {% else %}
+            <h3>{{ elem.0 }}: <strong style="color:red">{{elem.1}}₽</strong></h3>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+</div>
 
 <br>
-<!-- <script src="https://www.google.com/jsapi"></script>
-<script>
- google.load("visualization", "1", {packages:["corechart"]});
- google.setOnLoadCallback(drawChart);
- function drawChart() {
-  var data = google.visualization.arrayToDataTable([
-   ['Год', 'Россия', 'США'],
-   ['Пон', 1.3, 70],
-   ['Вт', 2000, 3120],
-   ['Ср', 12170, 919200],
-   ['Чт', 13000, 7000],
-   ['Пт', 2000, 3120],
-   ['Сб', 12170, 9920],
-   ['Вс', 12170, 9920],
-  ]);
-  var options = {
-   title: 'Добыча нефти',
-   hAxis: {title: 'Год'},
-   vAxis: {title: 'Тыс. тонн'}
-  };
-  var chart = new google.visualization.ColumnChart(document.getElementById('oil'));
-  chart.draw(data, options);
- }
-</script>
-<div id="oil" style="width: 500px; height: 400px;"></div> -->
 
-<!-- Диаграмма -->
-<script src="https://www.google.com/jsapi"></script>
+<!-- {% if cat_data %}
 {{ cat_data|json_script:"cat_data" }}
 <script src="{% static 'MainApp/js/cat_chart.js' %}"></script>
-<div class="container" id="cat_chart" style="width: 500px; height: 500px;"></div>
-<hr>
+<div class="container" id="cat_chart" style="width: 400px; height: 300px;"></div>
 <div class="container overflow-auto">
-    <table class="table shadow table-striped">
+    <table class="table table-striped">
         <thead class="bg-primary text-white">
             <tr>
                 <th class="col-3" scope="col">Категория</th>
@@ -79,9 +133,40 @@
         </tbody>
     </table>
     </div>
-    
 
 {% else %}
-<h1>Добавьте операции для просмотра статистики</h1>
+<div class="container d-flex justify-content-center border-dark border rounded-3 mw-100" style="width: 800px;">
+    <h3>Добавьте операции для просмотра диаграммы</h3>
+</div>
+
 {% endif %}
+<br>
+
+<div class="container border-dark border rounded-3 mw-100" style="width: 800px;">
+    <h3>Прогноз расходов к концу месяца: <strong style="color:red">{{forecast}}₽</strong></h3>
+
+    {% if bal >= 0 %}
+        <h3>Общий остаток сейчас: <strong style="color:green">{{bal}}₽</strong></h3>
+    {% else %}
+        <h3>Общий остаток сейчас: <strong style="color:red">{{bal}}₽</strong></h3>
+    {% endif %}
+
+    <h3>Общий остаток c учетом инфляции через:</h3>
+    {% for elem in cpi_data %}
+        {% if elem.1 >= 0 %}
+        <h3>{{ elem.0 }}: <strong style="color:green">{{elem.1}}₽</strong></h3>
+        {% else %}
+        <h3>{{ elem.0 }}: <strong style="color:red">{{elem.1}}₽</strong></h3>
+        {% endif %}
+    {% endfor %}
+</div> -->
+
+<!-- <br>
+
+{{ month_data|json_script:"month_data" }}
+<script src="{% static 'MainApp/js/month_chart.js' %}"></script>
+<div class="d-flex justify-content-center">
+    <div class="overflow-auto" id="forecast_chart" style="width: 1000px; height: 500px;"></div>
+</div> -->
+
 {% endblock content %}

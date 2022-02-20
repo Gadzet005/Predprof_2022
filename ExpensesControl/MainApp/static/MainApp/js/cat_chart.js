@@ -8,7 +8,7 @@ function drawChart() {
     for (var i in cat_data) {
         lst.push([cat_data[i][0], cat_data[i][1]])
     }
-    console.log(lst)
+    
     var data = google.visualization.arrayToDataTable(lst);
     var options = {
         title: 'Категории',

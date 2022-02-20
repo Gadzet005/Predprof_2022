@@ -35,15 +35,14 @@
 </div>
 
 <div class="d-flex justify-content-center">
-    <h3>Баланс:</h3><pre> </pre>
     {% if bal >= 0 %}
-        <h3 style="color:green;" id="bal">{{ bal }}</h3>
+        <h1 style="color:green;" id="bal">{{ bal }}</h1>
         <pre> </pre>
-        <h3 style="color:green;" id="bal_unit">₽</h3>
+        <h1 style="color:green;" id="bal_unit">₽</h1>
     {% else %}
-        <h3 style="color:red;" id="bal">{{ bal }}</h3>
+        <h1 style="color:red;" id="bal">{{ bal }}</h1>
         <pre> </pre>
-        <h3 style="color:red;" id="bal_unit">₽</h3>
+        <h1 style="color:red;" id="bal_unit">₽</h1>
     {% endif %}
 </div>
 

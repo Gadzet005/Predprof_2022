@@ -10,7 +10,7 @@ from .models import *
 from .filters import *
 from MainApp.models import *
 from .forms import *
-
+from .utils import *
 
 class Operations(LoginRequiredMixin, FilterView):
     template_name = "MoneyControlApp/operations.html"
@@ -104,8 +104,25 @@ class Categories(LoginRequiredMixin, FilterView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Категории"
-        operations = self.filterset.qs.filter(user=self.request.user)
+        operations = self.object_list
         
+        # Прогноз расходов до конца месяца
+        forecast = ExpenseForecast()
+        value, month_date = forecast.createForecast(self.qs)
+        context["forecast"] = value
+        context["month_data"] = month_date
+
+        # Расчет остатка на будущее с использованием ИПЦ
+        cpi = CPI()
+        bal = Operation.get_sum(self.qs)
+
+        cpi_data = [("3 месяца", cpi.getNextTreeMonth(bal)), ("6 месяцев", cpi.getNextSixMonth(bal)),
+                    ("год", cpi.getNextYear(bal))]
+
+        context["cpi_data"] = cpi_data
+        context["bal"] = bal
+
+        # Данные о категориях
         data = {}
         for operation in operations:
             if operation.category.name not in data:
@@ -125,6 +142,11 @@ class Categories(LoginRequiredMixin, FilterView):
         context["cat_data"] = cat_data
 
         return context
+
+    def get_queryset(self):
+        qs = super().get_queryset().filter(user=self.request.user)
+        self.qs = qs
+        return qs
 
 class ExportData(LoginRequiredMixin, FormView):
     model = Operation
