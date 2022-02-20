@@ -89,10 +89,10 @@ class CPI:
     
     @staticmethod
     def updateCPI():
+        # получение ипц из интернета
         try:
-            # получение ипц из интернета
             url = "https://www.statbureau.org/ru/russia/cpi"
-            gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+            gcontext = ssl._create_unverified_context()
             html = urlopen(url, context=gcontext).read()
             soup = BeautifulSoup(html, features="html.parser")
             for script in soup(["script", "style"]):
