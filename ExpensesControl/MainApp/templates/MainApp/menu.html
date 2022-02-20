@@ -1,29 +1,37 @@
-<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <ul class="nav nav-pills">
-        {% for elem in menu %}
-            {% if elem.submenu %}
-            <li class="nav-item dropdown">
-                {% if elem.selected %}
-                <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ elem.title }}</a>
-                {% else %}
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ elem.title }}</a>
-                {% endif %}
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3 px-2 mb-4 border-bottom" style="font-size: 20px;">
+<a class="navbar-brand" href="{% url 'home' %}">Sinking Ship Team</a>
+<button class="navbar-toggler mx-4" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
 
-                <ul class="dropdown-menu">
-                    {% for sub_elem in elem.submenu %}
-                    <li><a class="dropdown-item" href="{% url sub_elem.url_name %}">{{ sub_elem.title }}</a></li>
-                    {% endfor %}
-                </ul>
-            </li>
+<div class="collapse navbar-collapse text-al" id="navbarSupportedContent">
+
+  <ul class="navbar-nav w-100 justify-content-center">
+    {% for elem in menu %}
+        {% if elem.submenu %}
+        <li class="nav-item dropdown">
+            {% if elem.selected %}
+            <a class="nav-link dropdown-toggle active" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ elem.title }}</a>
             {% else %}
-            <li class="nav-item">
-                {% if elem.selected %}
-                <a class="nav-link active">{{ elem.title }}</a>
-                {% else %}
-                <a href="{% url elem.url_name %}" class="nav-link">{{ elem.title }}</a>
-                {% endif %}
-            </li>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ elem.title }}</a>
             {% endif %}
-      {% endfor %}
-    </ul>
-</header>
+
+            <ul class="dropdown-menu">
+                {% for sub_elem in elem.submenu %}
+                <li><a class="dropdown-item" href="{% url sub_elem.url_name %}">{{ sub_elem.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            {% if elem.selected %}
+            <a class="nav-link active">{{ elem.title }}</a>
+            {% else %}
+            <a href="{% url elem.url_name %}" class="nav-link">{{ elem.title }}</a>
+            {% endif %}
+        </li>
+        {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+</nav>

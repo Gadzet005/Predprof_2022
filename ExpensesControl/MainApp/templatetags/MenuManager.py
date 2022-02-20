@@ -1,7 +1,8 @@
+# Здесь формируются меню
+
 from django import template
 
 register = template.Library()
-
 
 def get_access_level(user):
     """
@@ -61,7 +62,6 @@ def get_menu_data(menu_name):
 
 @register.inclusion_tag('MainApp/menu.html')
 def get_menu(request, menu_name):
-    # selected - принудительно ставит выбраным элемент в меню
     current_url_name = request.resolver_match.url_name
     access_level = get_access_level(request.user)
 

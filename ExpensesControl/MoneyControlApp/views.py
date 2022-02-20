@@ -116,8 +116,12 @@ class Categories(LoginRequiredMixin, FilterView):
         cpi = CPI()
         bal = Operation.get_sum(self.qs)
 
-        cpi_data = [("3 месяца", cpi.getNextTreeMonth(bal)), ("6 месяцев", cpi.getNextSixMonth(bal)),
-                    ("год", cpi.getNextYear(bal))]
+        cpi_3_month, cpi_6_month, cpi_year = cpi.getNextTreeMonth(bal), cpi.getNextSixMonth(bal), cpi.getNextYear(bal)
+        print(cpi_3_month, cpi_year, cpi_6_month)
+
+        cpi_data = [("3 месяца", round(cpi_3_month * bal / 100), round(sum(cpi.cpi_data[:3]) / 3 - 100, 3)), 
+                    ("6 месяцев", round(cpi_6_month * bal / 100), round(sum(cpi.cpi_data[:6]) / 6 - 100, 3)),
+                    ("год", round(cpi_year * bal / 100), round(sum(cpi.cpi_data) / 12 - 100, 3))]
 
         context["cpi_data"] = cpi_data
         context["bal"] = bal

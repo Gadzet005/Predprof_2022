@@ -73,13 +73,13 @@ class CPI:
         self.cpi_data = json.loads(cpi.value)
 
     def getNextTreeMonth(self, value):
-        return round(value * sum(self.cpi_data[:3]) / 300)
+        return sum(self.cpi_data[:3]) / 3
 
     def getNextSixMonth(self, value):
-        return round(value * sum(self.cpi_data[:6]) / 600)
+        return sum(self.cpi_data[:6]) / 6
 
     def getNextYear(self, value):
-        return round(value * sum(self.cpi_data) / 1200)
+        return sum(self.cpi_data) / 12
     
     @staticmethod
     def updateCPI():
