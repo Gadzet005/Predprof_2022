@@ -1,3 +1,4 @@
+// Скрипт для получения суммы операции относительно выбранной базовой операции
 let operations = document.getElementsByName("operation");
 var amount_tr = document.getElementById("amount_tr");
 var select = null;
@@ -6,7 +7,7 @@ var bal = document.getElementById("bal");
 var bal_amount = bal.innerHTML
 var bal_unit = document.getElementById("bal_unit");
 
-// Формируем: id операции: сумма операции
+// amount_data = {id операции: сумма операции, ...}
 let amount_data = {};
 for (var i = 0; i < operations.length; i++) {
     amount_data[operations[i].id] = operations[i].cells["amount"].innerHTML;
@@ -14,6 +15,7 @@ for (var i = 0; i < operations.length; i++) {
 
 function SelectOperation () {
     if (select == this) {
+        // Показываем абсолютную сумму
         this.className = "table-light";
         select = null;
         amount_tr.innerHTML = "Сумма, ₽";
@@ -26,6 +28,7 @@ function SelectOperation () {
         }
     }
     else {
+        // Показываем относительную сумму
         if (select) {
             select.className = "table-light";
         }

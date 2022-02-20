@@ -6,6 +6,7 @@ from django.urls.base import reverse_lazy
 from django.views.generic import *
 from openpyxl import Workbook
 
+from .time_manager import *
 from .models import *
 from .filters import *
 from MainApp.models import *
@@ -25,7 +26,7 @@ class Operations(LoginRequiredMixin, FilterView):
         return context
 
     def get_queryset(self):
-        # Показывает пользователю только его изменения баланса
+        # Показывает пользователю только его операции
         return Operation.objects.filter(user=self.request.user).order_by('-date')
 
 class AddOperation(LoginRequiredMixin, CreateView):

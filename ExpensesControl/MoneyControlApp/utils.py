@@ -8,6 +8,7 @@ import json
 from .models import *
 from MainApp.models import Variable
 
+# Для планирования расходов
 class ExpenseForecast:
     def __init__(self) -> None:
         self.monthlyIncomes = list()
@@ -20,6 +21,7 @@ class ExpenseForecast:
         self.model.fit(pd.DataFrame(self.monthlyIncomes), pd.DataFrame(self.monthlyExpenses))
 
     def getForecast(self, currentMonthIncome) -> int:
+        # Получение прогноза с использованием введеных ранее значений
         try:
             return int(self.model.coef_ * currentMonthIncome)
         except:
@@ -64,13 +66,17 @@ class ExpenseForecast:
 
         return forecast_expense, sorted_data
 
+# Для работы с ИПЦ
 class CPI:
     def __init__(self):
         cpi, result = Variable.objects.get_or_create(name="ИПЦ")
         if result:
-            CPI.updateCPI()
-
-        self.cpi_data = json.loads(cpi.value)
+            # Если данных об ИПЦ нет, то получаем данные из интернета
+            db_cpi = CPI.updateCPI()
+            self.cpi_data = db_cpi
+        else:
+            # Если данные есть, то берем из базы данных
+            self.cpi_data = json.loads(cpi.value)
 
     def getNextTreeMonth(self, value):
         return sum(self.cpi_data[:3]) / 3
@@ -84,6 +90,7 @@ class CPI:
     @staticmethod
     def updateCPI():
         try:
+            # получение ипц из интернета
             url = "https://www.statbureau.org/ru/russia/cpi"
             gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
             html = urlopen(url, context=gcontext).read()
@@ -108,4 +115,4 @@ class CPI:
             db_cpi, result = Variable.objects.get_or_create(name="ИПЦ")
             db_cpi.value = json.dumps(cpi)
             db_cpi.save()
-            return db_cpi
+            return cpi

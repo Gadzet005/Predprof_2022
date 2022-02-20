@@ -3,7 +3,6 @@ google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(drawChart);
 
 function drawChart() {
-
     let lst = [["Категории", "Процент"]]
     for (var i in cat_data) {
         lst.push([cat_data[i][0], cat_data[i][1]])
