@@ -1,1 +1,1 @@
-Copyright (c) <2022> <SinkingShip Team>
+Copyright (c) 2022 SinkingShip Team
